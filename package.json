@@ -1,0 +1,7 @@
+{
+  "name": "grunt-nunjucks-alt",
+  "version": "0.1.0",
+  "dependencies": {
+    "nunjucks": "~1.0.1"
+  }
+}
