@@ -1,6 +1,6 @@
 {
   "name": "grunt-nunjucks-alt",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Nunjucks compiler for both normal and precompiling.",
   "repository": {
     "type":"git",
