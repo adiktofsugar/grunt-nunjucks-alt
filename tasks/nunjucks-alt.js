@@ -22,7 +22,7 @@ module.exports = function (grunt) {
 
 		var options = this.options({
 			baseDir: undefined,
-			name: /.*/,
+			name: /(.*)/,
 			data: {},
 			precompile: false,
 			env: null, // Special Environment for precompiled templates to run under
