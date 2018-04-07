@@ -1,7 +1,7 @@
 grunt-nunjucks-alt ...but why?
 ====
 
-The grunt-nunjucks task is only for precompiled frontend JS nunjucks templates And I can't find any good, flexible nunjucks grunt tasks at the moment.
+The grunt-nunjucks task is only for precompiled frontend JS nunjucks templates and I can't find any good, flexible nunjucks grunt tasks at the moment.
 
 This task can compile your nunjucks templates into static files, or precompile (with the precompile option). I've done some *pretty* complicated things with the file system paths, but not too many weird things with nunjucks itself, so if I've forgotten something important, or if there's an option that would make it worlds easier to use, let me know. (via raising an issue or pull request)
 
@@ -29,7 +29,7 @@ In your project's Gruntfile, add a section named `nunjucks-alt` to the data obje
 
 ```js
 grunt.initConfig({
-  nunjucks-alt: {
+  'nunjucks-alt': {
     options: {
       // Task-specific options go here.
     },
@@ -90,17 +90,18 @@ This is parsed the same way as "src" or "dest". If not specified, it'll use the 
 This will effectively strip off the this string from the beginning of a filename before trying to
 figure out the name.
 
-Example:
-  filepath - media/js/buttons/application.js
-  baseDir - media/js/
-  template name will be buttons/application.js
+#### Example:
 
-This is the same as making a name Regex like /media\/js\/(.*)/
+  - filepath: `media/js/buttons/application.js`
+  - baseDir: `media/js/`
+  - template name: `buttons/application.js`
+
+This is the same as making a name Regex like `/media\/js\/(.*)/`
 EXCEPT that if you don't add a "/" to the end of the baseDir, it's auto appended.
 
-### name: (Regex|Function) Default: /.*/
+### name: (Regex|Function) Default: `/.*/`
 As a regex, name will take all of the patterns you give it and squash it into one
-Remember a non capturing group is (?:whatever)
+Remember a non capturing group is `(?:whatever)`
 
 As a function, it will get passed the filepath of the file that's being processed, and whatever you return will
 become the name of the template
@@ -123,6 +124,6 @@ To this end, the precompiler will convert all your templates into JS and output 
 
 ### env: (nunjucks.Environment) Default: null
 This is only for precompiling, and is not normally used. It is the only way to get custom extensions into browser side
-nunjucks if you precompile. (http://jlongster.github.io/nunjucks/api.html#custom-tags)
+nunjucks if you precompile. (http://mozilla.github.io/nunjucks/api.html#environment)
 
 This object must be a nunjucks.Environment object. I don't know what loader you'd use, though...
