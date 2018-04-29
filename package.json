@@ -3,10 +3,18 @@
   "version": "0.1.2",
   "description": "Nunjucks compiler for both normal and precompiling.",
   "repository": {
-    "type":"git",
-    "url":"https://github.com/adiktofsugar/grunt-nunjucks-alt.git"
+    "type": "git",
+    "url": "https://github.com/adiktofsugar/grunt-nunjucks-alt.git"
   },
   "dependencies": {
-    "nunjucks": "~1.0.1"
+    "nunjucks": "^3.1.2"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-cli": "^1.2.0"
+  },
+  "scripts": {
+    "prepublish": "npm run -s test",
+    "test": "scripts/test"
   }
 }

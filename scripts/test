@@ -1,0 +1,35 @@
+#!/bin/bash
+project_root="$(cd `dirname ${BASH_SOURCE[0]}`; cd ..; pwd)"
+test_root="$project_root/test"
+
+failed=""
+
+for test_folder_name in `ls $test_root`; do
+  if [[ "$test_folder_name" = "templates" ]]; then
+    continue
+  fi
+  test_folder_path="$test_root/$test_folder_name"
+  pushd .
+  cd $test_folder_path
+  npx grunt
+  if ! [[ -d "$test_folder_path/out-snapshot" ]]; then
+    cp -rf "$test_folder_path/out" "$test_folder_path/out-snapshot"
+    echo "copied $test_folder_name out/ to out-snapshot/"
+  fi
+  diff_var_name="diff_${test_folder_name//-/_}"
+  declare "$diff_var_name=$(diff -r "$test_folder_path/out" "$test_folder_path/out-snapshot")"
+  if [[ "${!diff_var_name}" ]]; then
+    failed+="$test_folder_name "
+  fi
+  popd
+done
+
+if [[ "$failed" ]]; then
+  for test_folder_name in $failed; do
+    echo "FAILED: $test_folder_name"
+    diff_var_name="diff_${test_folder_name/-/_}"
+    echo "${!diff_var_name}"
+  done
+  exit 1
+fi
+exit 0

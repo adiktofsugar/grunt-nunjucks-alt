@@ -7,7 +7,7 @@ This task can compile your nunjucks templates into static files, or precompile (
 
 
 ## Getting Started
-This plugin requires Grunt `~0.4.1`
+This plugin requires Grunt 0.4.x or 1.x
 
 If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
 
@@ -30,12 +30,12 @@ In your project's Gruntfile, add a section named `nunjucks-alt` to the data obje
 ```js
 grunt.initConfig({
   'nunjucks-alt': {
-    options: {
-      // Task-specific options go here.
-    },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
+  options: {
+    // Task-specific options go here.
+  },
+  your_target: {
+    // Target-specific file lists and/or options go here.
+  },
   },
 })
 ```
@@ -43,47 +43,47 @@ grunt.initConfig({
 
 ## Usage
 
-    "nunjucks-alt": {
-        "html": {
-            options: {
-                name: new RegExp("src/pages/(.+?).html"),
-                searchPaths: "src/pages/**/*.html"
-            },
-            expand: true,
-            src: "src/pages/**/*.html",
-            dest: "target/",
+  "nunjucks-alt": {
+    "html": {
+      options: {
+        name: new RegExp("src/pages/(.+?).html"),
+        searchPaths: "src/pages/"
+      },
+      expand: true,
+      src: "src/pages/**/*.html",
+      dest: "target/",
+    },
+    "js": {
+      options: {
+        precompile: true,
+        name: function (filepath) {
+          filepath = filepath.replace("src/", "");
+          var filePathParts = filepath.split("/");
+
+          var moduleName = filePathParts.shift();
+          filePathParts.splice(0, 2); // to get rid of the "js/templates"
+          
+          var rest = filePathParts.join("/")
+            .replace(".html", "");
+          
+          // return something like "login/views/SuperView" for the template name
+          return moduleName + "/" + rest;
         },
-        "js": {
-            options: {
-                precompile: true,
-                name: function (filepath) {
-                    filepath = filepath.replace("src/", "");
-                    var filePathParts = filepath.split("/");
+        searchPaths: ['src/!(shared)/js/templates', 'target/**/templates']
+      },
+      expand: true,
+      src: "src/!(shared)/js/templates/**/*.html",
+      dest: "target/",
 
-                    var moduleName = filePathParts.shift();
-                    filePathParts.splice(0, 2); // to get rid of the "js/templates"
-                    
-                    var rest = filePathParts.join("/")
-                        .replace(".html", "");
-                    
-                    // return something like "login/views/SuperView" for the template name
-                    return moduleName + "/" + rest;
-                },
-                searchPaths: ['src/!(shared)/js/templates', 'target/**/templates']
-            },
-            expand: true,
-            src: "src/!(shared)/js/templates/**/*.html",
-            dest: "target/",
-
-            rename: function (dest, filepath) {
-                return path.join(dest, filepath.replace("src/", ""));
-            }
-        }
+      rename: function (dest, filepath) {
+        return path.join(dest, filepath.replace("src/", ""));
+      }
     }
+  }
 
 ## Options
 
-### searchPaths (String|Array) Default: all directories from your current directory, except node_modules
+### searchPaths: (String|Array) Default: all directories from your current directory, except node_modules 
 This is parsed the same way as "src" or "dest". If not specified, it'll use the current directory.
 
 ### baseDir: (String) Default: (none)
@@ -99,7 +99,7 @@ figure out the name.
 This is the same as making a name Regex like `/media\/js\/(.*)/`
 EXCEPT that if you don't add a "/" to the end of the baseDir, it's auto appended.
 
-### name: (Regex|Function) Default: `/.*/`
+### name: (Regex|Function) Default: `/.*/` 
 As a regex, name will take all of the patterns you give it and squash it into one
 Remember a non capturing group is `(?:whatever)`
 
@@ -122,8 +122,11 @@ nunjucks templates on the server side with a nunjucks library that doesn't have 
 
 To this end, the precompiler will convert all your templates into JS and output them in the given directory.
 
-### env: (nunjucks.Environment) Default: null
-This is only for precompiling, and is not normally used. It is the only way to get custom extensions into browser side
-nunjucks if you precompile. (http://mozilla.github.io/nunjucks/api.html#environment)
-
-This object must be a nunjucks.Environment object. I don't know what loader you'd use, though...
+### beforeEnv: (function) Default: null
+If you define this, you can modify the nunjucks.Environment this task creates before it's used.
+Example (add 'shorten' filter):
+```
+beforeEnv: env => {
+  env.addFilter('shorten', (str, count) => str.slice(0, count))
+}
+```
