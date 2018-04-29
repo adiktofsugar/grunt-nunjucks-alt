@@ -14,7 +14,7 @@
     "grunt-cli": "^1.2.0"
   },
   "scripts": {
-    "prepublish": "npm run -s test",
+    "prepublishOnly": "npm run -s test",
     "test": "scripts/test"
   }
 }
